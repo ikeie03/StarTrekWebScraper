@@ -7,14 +7,6 @@ import certifi
 
 import csv
 
-urls = ["https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(23rd_century)",
-        "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(22nd_century)",
-        "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(24th_century)",
-        "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(25th_century)",
-        "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(26th_century)",
-        "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(29th_century)",
-        "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(32nd_century)"]
-
 def scrape_personnel_file(url, scraped_ranks):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     try:
@@ -45,6 +37,8 @@ def scrape_personnel_file(url, scraped_ranks):
         return
     name = name_span.text.strip()
 
+    print([name, rank])
+
     # writing to file
     scraped_ranks.append([name, rank])
 
@@ -73,7 +67,9 @@ for url in urls:
     planet_page.close()
     html_soup = BeautifulSoup(page_html, 'html.parser')
 
-    for personnel_list_item in html_soup.find_all('li'):
+    body = html_soup.find(class_='mw-parser-output')
+
+    for personnel_list_item in body.find_all('li'):
         # searching a specific individual
         personnel_link = personnel_list_item.findChildren("a", recursive=False)
         if personnel_link:
@@ -81,7 +77,7 @@ for url in urls:
         else:
             continue
 
-        personnel_url = personnel_link.get('href')
+        personnel_url = 'https://memory-alpha.fandom.com' + personnel_link.get('href')
         print(personnel_url)
 
         scrape_personnel_file(personnel_url, scraped_ranks)
@@ -89,4 +85,3 @@ for url in urls:
     with open("scraped_ranks.csv", 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(scraped_ranks)
-    

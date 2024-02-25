@@ -1,6 +1,11 @@
 # Read all lines from planets.txt
-from urllib.request import urlopen
+from urllib import request
 from bs4 import BeautifulSoup
+
+import ssl
+import certifi
+from urllib.request import urlopen
+
 
 planets = []
 with open('planets.txt', 'r') as file:
@@ -9,22 +14,21 @@ with open('planets.txt', 'r') as file:
 
 for planet in planets:
     url = "https://memory-alpha.fandom.com/wiki/" + planet
-    print(url)
 
-    planet_page = urlopen(url)
-    # page_html = planet_page.read()
-    # planet_page.close()
-    # html_soup = BeautifulSoup(page_html, 'html.parser')
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
 
-    # # The status always follows this html element:
-    # # <h3 class="pi-data-label pi-secondary-font">Status:</h3>
-    # status_label = html_soup.find('h3', class_='pi-data-label pi-secondary-font')
+    planet_page = request.urlopen(url, context=ssl_context)
+    page_html = planet_page.read()
+    planet_page.close()
+    html_soup = BeautifulSoup(page_html, 'html.parser')
 
-    # status_div = status_label.find_next_sibling('div')
+    # The status always follows this html element:
+    # <h3 class="pi-data-label pi-secondary-font">Status:</h3>
+    status_label = html_soup.find('h3', class_='pi-data-label pi-secondary-font', string='Status:')
+    status_div = status_label.find_next_sibling('div')
+    status = status_div.text.strip().split()[0]
 
-    # status = status_div.text.strip()
-
-    # print(status)
+    print(status)
 
 
 

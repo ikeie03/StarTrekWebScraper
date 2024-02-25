@@ -2,7 +2,7 @@
 
 ## Project Description
 
-Goal: Scrape the [Star Trek Wiki pages listing canon planets](https://memory-alpha.fandom.com/wiki/Category:Planets) to determine what percentage are habitable.
+Goal: Scrape the [Star Trek Wiki pages listing canon planets](https://memory-alpha.fandom.com/wiki/Category:Planets) to determine what percentage of planets are habitable, and what the distribution of officers by rank is.
 
 Quick note: all results are biased based on what the wiki editors have made a record of. Not all Starfleet officer's pages, for example, have their rank listed.
 

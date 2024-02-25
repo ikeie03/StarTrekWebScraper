@@ -7,13 +7,15 @@ import certifi
 
 import csv
 
-urls = ["https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(22nd_century)",
-"https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(23rd_century)",
-"https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(24th_century)",
-"https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(25th_century)",
-"https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(26th_century)",
-"https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(29th_century)",
-"https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(32nd_century)"]
+urls = [
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(22nd_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(23rd_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(24th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(25th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(26th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(29th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(32nd_century)"
+    ]
 
 for url in urls:
     ssl_context = ssl.create_default_context(cafile=certifi.where())

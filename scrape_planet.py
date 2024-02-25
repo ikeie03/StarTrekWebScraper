@@ -36,7 +36,6 @@ for (idx, planet) in enumerate(planets):
     planet_page.close()
     html_soup = BeautifulSoup(page_html, 'html.parser')
 
-    # FIRST INFO TO SCRAPE: PLANET STATUS
     # The status always follows this html element:
     # <h3 class="pi-data-label pi-secondary-font">Status:</h3>
     status_label = html_soup.find('h3', class_='pi-data-label pi-secondary-font', string='Status:')
@@ -49,8 +48,6 @@ for (idx, planet) in enumerate(planets):
     status = status_div.text.strip().split()[0]
 
     scraped_results.append([planet, status])
-
-    # NEXT INFO TO SCRAPE: 
 
     # write results to file every 100 planets
     if idx % 100 == 0:

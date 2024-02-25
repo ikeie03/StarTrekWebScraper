@@ -14,7 +14,7 @@ with open('planets.txt', 'r') as file:
     # TODO: replace all spaced and special chars w underscores etc
 
 scraped_results = [["planet_name", "status"]]
-with open("scraped_results.csv", 'w', newline='') as csvfile:
+with open("scraped_planets.csv", 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerows(scraped_results)
 scraped_results = []
@@ -51,13 +51,13 @@ for (idx, planet) in enumerate(planets):
 
     # write results to file every 100 planets
     if idx % 100 == 0:
-        with open("scraped_results.csv", 'a', newline='') as csvfile:
+        with open("scraped_planets.csv", 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(scraped_results)
 
         scraped_results = []
 
 # write remaining planets
-with open("scraped_results.csv", 'a', newline='') as csvfile:
+with open("scraped_planets.csv", 'a', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerows(scraped_results)

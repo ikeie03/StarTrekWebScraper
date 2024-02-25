@@ -7,6 +7,27 @@ import certifi
 
 import csv
 
+def scrape_personnel_file(url, scraped_ranks):
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    person_page = request.urlopen(url, context=ssl_context)
+    page_html = planet_page.read()
+    person_page.close()
+    html_soup = BeautifulSoup(page_html, 'html.parser')
+
+    rank_label = html_soup.find('h3', class_='pi-data-label pi-secondary-font', string='Rank:')
+
+    if not rank_label:
+        return
+    
+    rank_div = rank_label.find_next_sibling('div')
+    rank = rank_div.findChildren("a", recursive=False).text.strip()
+    scraped_ranks.append([name, rank])
+
+
+with open("scraped_ranks.csv", 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerows([["officer_name", "rank"]])
+
 urls = [
     "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(22nd_century)",
     "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(23rd_century)",
@@ -18,8 +39,9 @@ urls = [
     ]
 
 for url in urls:
-    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    scraped_ranks = []
 
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
     planet_page = request.urlopen(url, context=ssl_context)
     page_html = planet_page.read()
     planet_page.close()
@@ -35,26 +57,9 @@ for url in urls:
 
         personnel_url = personnel_link.get('href')
 
-        scrape_personnel_file(personnel_url)
+        scrape_personnel_file(personnel_url, scraped_ranks)
 
-
-
-def scrape_personnel_file(url):
-    ssl_context = ssl.create_default_context(cafile=certifi.where())
-    person_page = request.urlopen(url, context=ssl_context)
-    page_html = planet_page.read()
-    person_page.close()
-    html_soup = BeautifulSoup(page_html, 'html.parser')
-
-    rank_label = html_soup.find('h3', class_='pi-data-label pi-secondary-font', string='Rank:')
-
-    if not rank_label:
-        return
-    
-    rank_div = rank_label.find_next_sibling('div')
-    rank = rank_div.findChildren("a", recursive=False).text.strip()
-
-    scraped_results = []
     with open("scraped_ranks.csv", 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(scraped_results)
+        writer.writerows(scraped_ranks)
+    

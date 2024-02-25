@@ -57,3 +57,8 @@ for (idx, planet) in enumerate(planets):
             writer.writerows(scraped_results)
 
         scraped_results = []
+
+# write remaining planets
+with open("scraped_results.csv", 'a', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerows(scraped_results)

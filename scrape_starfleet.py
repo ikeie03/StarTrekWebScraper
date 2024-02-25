@@ -15,7 +15,7 @@ urls = ["https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(23rd_century)
         "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(29th_century)",
         "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(32nd_century)"]
 
-def scrape_personnel_file(url):
+def scrape_personnel_file(url, scraped_ranks):
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     try:
         person_page = request.urlopen(url, context=ssl_context)
@@ -46,15 +46,28 @@ def scrape_personnel_file(url):
     name = name_span.text.strip()
 
     # writing to file
-    scraped_results = [name, rank]
-    print(scraped_results)
-    with open("scraped_ranks.csv", 'a', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(scraped_results)
+    scraped_ranks.append([name, rank])
+
+
+
+with open("scraped_ranks.csv", 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerows([["officer_name", "rank"]])
+
+urls = [
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(22nd_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(23rd_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(24th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(25th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(26th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(29th_century)",
+    "https://memory-alpha.fandom.com/wiki/Starfleet_personnel_(32nd_century)"
+    ]
 
 for url in urls:
-    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    scraped_ranks = []
 
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
     planet_page = request.urlopen(url, context=ssl_context)
     page_html = planet_page.read()
     planet_page.close()
@@ -71,4 +84,9 @@ for url in urls:
         personnel_url = personnel_link.get('href')
         print(personnel_url)
 
-        scrape_personnel_file(personnel_url)
+        scrape_personnel_file(personnel_url, scraped_ranks)
+
+    with open("scraped_ranks.csv", 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(scraped_ranks)
+    

@@ -14,7 +14,7 @@ with open('planets.txt', 'r') as file:
     # TODO: replace all spaced and special chars w underscores etc
 
 scraped_results = [["planet_name", "status"]]
-with open("scraped_results.csv", 'w', newline='') as csvfile:
+with open("scraped_planets.csv", 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerows(scraped_results)
 scraped_results = []
@@ -36,7 +36,6 @@ for (idx, planet) in enumerate(planets):
     planet_page.close()
     html_soup = BeautifulSoup(page_html, 'html.parser')
 
-    # FIRST INFO TO SCRAPE: PLANET STATUS
     # The status always follows this html element:
     # <h3 class="pi-data-label pi-secondary-font">Status:</h3>
     status_label = html_soup.find('h3', class_='pi-data-label pi-secondary-font', string='Status:')
@@ -50,17 +49,15 @@ for (idx, planet) in enumerate(planets):
 
     scraped_results.append([planet, status])
 
-    # NEXT INFO TO SCRAPE: 
-
     # write results to file every 100 planets
     if idx % 100 == 0:
-        with open("scraped_results.csv", 'a', newline='') as csvfile:
+        with open("scraped_planets.csv", 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(scraped_results)
 
         scraped_results = []
 
 # write remaining planets
-with open("scraped_results.csv", 'a', newline='') as csvfile:
+with open("scraped_planets.csv", 'a', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerows(scraped_results)
